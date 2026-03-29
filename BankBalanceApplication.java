@@ -7,11 +7,14 @@ public class BankBalanceApplication extends JFrame implements ActionListener {
     GridBagConstraints layoutConst;
 
     private JLabel BalanceLabel; //Label for current balance
+    private JLabel balanceValueLabel; //Label to display current balance value
     private JLabel AmountLabel; //Label for deposit amount
     private JTextField AmountField; //Text field for deposit amount
     private double balance = 1000.00; //Initial balance
     private JButton depositButton; //Button to perform deposit
     private JButton withdrawButton; //Button to perform withdrawal
+
+
 
     BankBalanceApplication() {
         //Frame setup
@@ -36,7 +39,7 @@ public class BankBalanceApplication extends JFrame implements ActionListener {
         panel.add(BalanceLabel, layoutConst);
 
         //Display initial balance
-        JLabel balanceValueLabel = new JLabel(String.format("%.2f", balance));
+        balanceValueLabel = new JLabel(String.format("%.2f", balance));
         layoutConst.gridx = 1;
         layoutConst.gridy = 0;
         panel.add(balanceValueLabel, layoutConst);
@@ -69,9 +72,35 @@ public class BankBalanceApplication extends JFrame implements ActionListener {
         //Make window visible
         setVisible(true);
     }
-    
+    public void deposit(double amount) {
+        balance += amount;
+    }
+
+    public void withdraw(double amount) {
+        if (amount <= balance) {
+            balance -= amount;
+        } else {
+            throw new IllegalArgumentException("Insufficient funds for withdrawal.");
+        }
+    }
+
     public void actionPerformed(ActionEvent e) {
-        // Handle button click event
+        try{
+            double amount = Double.parseDouble(AmountField.getText());
+
+            //Check which button was clicked
+            if(e.getSource() == depositButton) {
+                deposit(amount);
+            } else if (e.getSource() == withdrawButton) {
+                withdraw(amount);
+            }
+            //Update the displayed balance
+            balanceValueLabel.setText(String.format("%.2f", balance));
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Please enter a valid number for the amount.", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+        } catch (IllegalArgumentException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public static void main(String[] args) {
