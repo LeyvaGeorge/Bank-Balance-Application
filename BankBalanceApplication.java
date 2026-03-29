@@ -3,15 +3,79 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class BankBalanceApplication extends JFrame implements ActionListener {
+    JPanel panel;
+    GridBagConstraints layoutConst;
+
+    private JLabel BalanceLabel; //Label for current balance
+    private JLabel AmountLabel; //Label for deposit amount
+    private JTextField AmountField; //Text field for deposit amount
+    private double balance = 1000.00; //Initial balance
+    private JButton depositButton; //Button to perform deposit
+    private JButton withdrawButton; //Button to perform withdrawal
+
+    BankBalanceApplication() {
+        //Frame setup
+        setTitle("Bank Balance Application");
+        setSize(400,300);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        //Create Panel
+        panel = new JPanel();
+
+        //Set Layout on the Panel
+        panel.setLayout(new GridBagLayout());
+
+        //Create constraints object
+        layoutConst = new GridBagConstraints();
+        layoutConst.insets = new Insets(10, 10, 10, 10); //Add padding
+
+        //Adding first label and text field
+        BalanceLabel = new JLabel("Current Balance: $");
+        layoutConst.gridx = 0;
+        layoutConst.gridy = 0;
+        panel.add(BalanceLabel, layoutConst);
+
+        //Display initial balance
+        JLabel balanceValueLabel = new JLabel(String.format("%.2f", balance));
+        layoutConst.gridx = 1;
+        layoutConst.gridy = 0;
+        panel.add(balanceValueLabel, layoutConst);
+
+        //Adding second label and text field
+        AmountLabel = new JLabel("Amount: $");
+        layoutConst.gridx = 0;
+        layoutConst.gridy = 1;
+        panel.add(AmountLabel, layoutConst);
+        AmountField = new JTextField(10);
+        layoutConst.gridx = 1;
+        layoutConst.gridy = 1;
+        panel.add(AmountField, layoutConst);
+
+        //Adding Buttons
+        depositButton = new JButton("Deposit");
+        layoutConst.gridx = 0;
+        layoutConst.gridy = 2;
+        panel.add(depositButton, layoutConst);
+        depositButton.addActionListener(this);
+        withdrawButton = new JButton("Withdraw");
+        layoutConst.gridx = 1;
+        layoutConst.gridy = 2;
+        panel.add(withdrawButton, layoutConst);
+        withdrawButton.addActionListener(this);
+
+        //Add panel to frame
+        add(panel);
+
+        //Make window visible
+        setVisible(true);
+    }
+    
     public void actionPerformed(ActionEvent e) {
         // Handle button click event
     }
 
     public static void main(String[] args) {
-        BankBalanceApplication app = new BankBalanceApplication();
-        app.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        app.setSize(400, 300);
-        app.setVisible(true);
+        new BankBalanceApplication();
     }
 }   
 
