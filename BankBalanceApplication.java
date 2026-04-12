@@ -13,18 +13,15 @@ public class BankBalanceApplication extends JFrame implements ActionListener {
     private double balance = 1000.00; //Initial balance
     private JButton depositButton; //Button to perform deposit
     private JButton withdrawButton; //Button to perform withdrawal
-
-
+    private JButton exitButton; //Button to exit the application
 
     BankBalanceApplication() {
         //Frame setup
         setTitle("Bank Balance Application");
         setSize(400,300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
         //Create Panel
         panel = new JPanel();
-
         //Set Layout on the Panel
         panel.setLayout(new GridBagLayout());
 
@@ -65,13 +62,18 @@ public class BankBalanceApplication extends JFrame implements ActionListener {
         layoutConst.gridy = 2;
         panel.add(withdrawButton, layoutConst);
         withdrawButton.addActionListener(this);
+        exitButton = new JButton("Exit");
+        layoutConst.gridx = 2;
+        layoutConst.gridy = 2;
+        panel.add(exitButton, layoutConst);
+        exitButton.addActionListener(this);
 
         //Add panel to frame
         add(panel);
-
         //Make window visible
         setVisible(true);
     }
+    
     public void deposit(double amount) {
         balance += amount;
     }
@@ -85,9 +87,16 @@ public class BankBalanceApplication extends JFrame implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent e) {
+        //Check if exit button was clicked
+        if(e.getSource() == exitButton) {
+            System.exit(0);
+        }
+        //Try to parse the amount and perform the appropriate action
         try{
             double amount = Double.parseDouble(AmountField.getText());
-
+            if (amount < 0) {
+                throw new IllegalArgumentException("Amount must be positive.");
+            }
             //Check which button was clicked
             if(e.getSource() == depositButton) {
                 deposit(amount);
